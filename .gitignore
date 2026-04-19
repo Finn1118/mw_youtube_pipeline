@@ -1,0 +1,11 @@
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.speaker_cache.sqlite
+.speaker_cache.sqlite-*
+*.pyc
+*.pyo
+*.pyd
+*.tmp
