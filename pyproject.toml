@@ -3,9 +3,9 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "speaker-extraction"
+name = "mw-youtube-pipeline"
 version = "0.1.0"
-description = "YouTube speaker extraction pipeline with diarization and name mapping"
+description = "mw_youtube_pipeline: YouTube URL → diarized speakers + aggregated text (FastAPI + library)"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [

@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -28,6 +29,18 @@ class RenamePayload(BaseModel):
     renames: list[SpeakerRename]
 
 app = FastAPI(title="Speaker Extraction API")
+
+# Allow the millionways-platform Vue dev server (Vite default port) to call us
+# directly during local development. Add other origins here as needed.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def _thumbnail_for(video_id: str, info: dict[str, Any]) -> str:
