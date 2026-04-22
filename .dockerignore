@@ -1,0 +1,9 @@
+.env
+.env.txt
+*.sqlite
+__pycache__
+**/__pycache__
+*.pyc
+.git
+tests/
+web/
