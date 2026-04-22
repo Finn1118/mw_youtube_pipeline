@@ -16,6 +16,7 @@ def fetch_audio(url: str, workdir: Path) -> tuple[Path, dict[str, Any]]:
         "quiet": True,
         "no_warnings": True,
         "noplaylist": True,
+        "extractor_args": {"youtube": {"player_client": ["android_vr", "web"]}},
     }
     try:
         with yt_dlp.YoutubeDL(opts) as ydl:

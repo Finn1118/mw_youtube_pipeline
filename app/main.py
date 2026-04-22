@@ -3,6 +3,9 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
+
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -34,10 +37,7 @@ app = FastAPI(title="Speaker Extraction API")
 # directly during local development. Add other origins here as needed.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-    ],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -143,4 +143,4 @@ async def rename_speakers_endpoint(video_id: str, payload: RenamePayload) -> dic
 
 
 WEB_DIR = Path(__file__).resolve().parent.parent / "web"
-app.mount("/", StaticFiles(directory=WEB_DIR, html=True), name="web")
+app.mount("/ui", StaticFiles(directory=WEB_DIR, html=True), name="web")
