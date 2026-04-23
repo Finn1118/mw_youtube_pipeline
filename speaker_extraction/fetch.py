@@ -40,15 +40,17 @@ def _get_cookies_file() -> str | None:
 
 def fetch_audio(url: str, workdir: Path) -> tuple[Path, dict[str, Any]]:
     """Download audio-only stream and return (path, metadata)."""
+    cookies_file = _get_cookies_file()
     opts = {
         "format": "bestaudio[ext=m4a]/bestaudio",
         "outtmpl": str(workdir / "%(id)s.%(ext)s"),
         "quiet": True,
         "no_warnings": True,
         "noplaylist": True,
-        "extractor_args": {"youtube": {"player_client": ["android_vr", "web"]}},
+        # With cookies, use web client so auth is respected.
+        # Without cookies, android_vr bypasses the JS challenge on residential IPs.
+        "extractor_args": {"youtube": {"player_client": ["web"] if cookies_file else ["android_vr", "web"]}},
     }
-    cookies_file = _get_cookies_file()
     if cookies_file:
         opts["cookiefile"] = cookies_file
 
