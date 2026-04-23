@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import logging
 import os
 import tempfile
 from pathlib import Path
@@ -9,6 +10,8 @@ from typing import Any
 import yt_dlp
 
 from .errors import VideoUnavailableError
+
+logger = logging.getLogger(__name__)
 
 # Decoded once per process lifetime and written to a temp file.
 _cookies_file: str | None = None
@@ -20,6 +23,7 @@ def _get_cookies_file() -> str | None:
         return _cookies_file
     b64 = os.environ.get("YOUTUBE_COOKIES_B64", "").strip()
     if not b64:
+        logger.warning("YOUTUBE_COOKIES_B64 not set — yt-dlp will run without cookies")
         return None
     try:
         data = base64.b64decode(b64)
@@ -27,7 +31,9 @@ def _get_cookies_file() -> str | None:
         tmp.write(data)
         tmp.close()
         _cookies_file = tmp.name
-    except Exception:
+        logger.info("YouTube cookies loaded (%d bytes) -> %s", len(data), tmp.name)
+    except Exception as exc:
+        logger.error("Failed to decode YOUTUBE_COOKIES_B64: %s", exc)
         return None
     return _cookies_file
 
